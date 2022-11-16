@@ -151,7 +151,7 @@ public class Reply extends JDialog {
 			return;
 		}
 
-		comment = addCommentToDatabase(comment_id, comment_text, comment_image, comment_video, comment_num_of_likes,
+		comment = addReplyToDB(comment_id, comment_text, comment_image, comment_video, comment_num_of_likes,
 				comment_post_id, comment_user_id);
 		if (comment != null) {
 			JOptionPane.showMessageDialog(this, "New reply uploaded.", "Reply Success",
@@ -168,7 +168,7 @@ public class Reply extends JDialog {
 	 */
 	public Comment comment;
 
-	private Comment addCommentToDatabase(int comment_id, String comment_text, String comment_image,
+	private Comment addReplyToDB(int comment_id, String comment_text, String comment_image,
 			String comment_video, int comment_num_of_likes, int comment_post_id, String comment_user_id) {
 		Comment comment = null;
 
