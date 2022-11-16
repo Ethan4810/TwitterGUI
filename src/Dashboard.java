@@ -44,7 +44,7 @@ public class Dashboard extends JFrame {
 	 * Create the frame.
 	 */
 	public Dashboard() {
-		System.out.println("this is a test.");
+		System.out.println("this is test");
 		setTitle("Dashboard");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
