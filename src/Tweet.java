@@ -70,7 +70,6 @@ public class Tweet extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane);
 			
-			// TODO: add tweet success & fail message 
 			{
 				btnTweet = new JButton("Tweet");
 				btnTweet.setForeground(new Color(255, 255, 255));
@@ -150,10 +149,12 @@ public class Tweet extends JDialog {
 
 		post = addPostToDatabase(post_id, post_text, post_image, post_video, post_num_of_likes, post_user_id);
 		if (post != null) {
+			System.out.println("You posted a tweet.");
 			JOptionPane.showMessageDialog(this, "Post ID = " + post_id, "Tweet Success",
 					JOptionPane.INFORMATION_MESSAGE);
 			dispose();
 		} else {
+			System.out.println("Tweet post failed.");
 			JOptionPane.showMessageDialog(this, "Try again!", "Tweet Failed", JOptionPane.ERROR_MESSAGE);
 		}
 	}

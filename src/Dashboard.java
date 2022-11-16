@@ -56,12 +56,15 @@ public class Dashboard extends JFrame {
 		contentPanel.setBounds(135, 5, 500, 811);
 		contentPane.add(contentPanel);
 		contentPanel.setLayout(null);
-
+		
+		// TODO fix: name not showing error after sign up
 		lbWelcomeUser = new JLabel("Hello! ");
 		lbWelcomeUser.setFont(new Font("Lucida Grande", Font.PLAIN, 17));
 		lbWelcomeUser.setHorizontalAlignment(SwingConstants.CENTER);
 		lbWelcomeUser.setBounds(6, 6, 488, 46);
 		contentPanel.add(lbWelcomeUser);
+		
+		// TODO new feature: get resolution from each computer and set size accordingly
 		contentPanel.setSize(500, 811);
 
 		boolean hasRegisteredUsers = connectToDatabase();
@@ -144,8 +147,7 @@ public class Dashboard extends JFrame {
 		btnMessages.setBounds(-1, 585, 117, 29);
 		buttonPanel.add(btnMessages);
 
-		// TODO: fix dashboard not showing error
-		// after logout -> sign up -> cancel -> login
+		// TODO: fix dashboard not showing error after logout -> sign up -> cancel -> login
 		btnLogout = new JButton("Logout");
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

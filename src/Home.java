@@ -106,7 +106,6 @@ public class Home extends JDialog {
 				getRootPane().setDefaultButton(btnReply);
 			}
 
-			// TODO: add like success & fail message 
 			btnLike = new JButton("Like");
 			btnLike.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -125,8 +124,7 @@ public class Home extends JDialog {
 			});
 			buttonPane.add(btnBookmark);
 
-			// TODO: fix first tweet not showing error 
-			// after pressing next button
+			// TODO: fix first tweet not showing error after pressing next button
 			btnPrevious = new JButton("<-");
 			btnPrevious.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -150,8 +148,7 @@ public class Home extends JDialog {
 				buttonPane.add(btnClose);
 			}
 
-			// TODO: fix null tweet showing error 
-			// after viewing the oldest tweet
+			// TODO: fix null tweet showing error after viewing the oldest tweet
 			btnNext = new JButton("->");
 			btnNext.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -262,6 +259,8 @@ public class Home extends JDialog {
 
 			if (rs.next()) {
 				System.out.println("You already liked this post!");
+				JOptionPane.showMessageDialog(this, "You already liked this post!", "Like Failed",
+						JOptionPane.ERROR_MESSAGE);
 			} else {
 				++plid; // for pstl_id
 
@@ -287,6 +286,9 @@ public class Home extends JDialog {
 				stmt.executeUpdate(s4);
 				
 				System.out.println("You liked this post.");
+				JOptionPane.showMessageDialog(this, "One like added.", "Like Success",
+						JOptionPane.INFORMATION_MESSAGE);
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

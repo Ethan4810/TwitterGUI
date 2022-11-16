@@ -73,7 +73,6 @@ public class Reply extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			
-			// TODO: add reply success & fail message 
 			{
 				btnReply = new JButton("Reply");
 				btnReply.setForeground(new Color(255, 255, 255));
