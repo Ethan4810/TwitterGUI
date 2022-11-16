@@ -3,14 +3,40 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.awt.event.ActionEvent;
-//import java.sql.*;
+import java.sql.*;
 
 public class Bookmarks extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
 	private final JPanel contentPanel = new JPanel();
+
+	private JLabel lbPostUserID;
+	private JLabel lbPostID;
+	private JLabel lbPostDate;
+	private JLabel lbPostText;
+	private JLabel lbPostImage;
+
+	private JButton btnReply;
+	private JButton btnLike;
+	private JButton btnBookmark;
+	private JButton btnPrevious;
+	private JButton btnClose;
+	private JButton btnNext;
+
+	public static int cur_bookmark_id; // declare current bookmark id
+	String cur_user_id = Login.cur_user_id; // get current user id from Login class
+	int cur_post_id = Home.cur_post_id; // get current post id from Home class
+
+	public static int m = 0;
+	public static int currentBookmarkID = 0;
+	public static int maxBookmarkID = 0;
 
 	/**
 	 * Launch the application.
@@ -34,45 +60,144 @@ public class Bookmarks extends JDialog {
 		setTitle("Bookmarks");
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setModal(true);
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(null);
+		{
+			lbPostUserID = new JLabel("User ID");
+			lbPostUserID.setBounds(6, 10, 138, 16);
+			contentPanel.add(lbPostUserID);
+		}
+		{
+			lbPostID = new JLabel("Post ID");
+			lbPostID.setHorizontalAlignment(SwingConstants.CENTER);
+			lbPostID.setBounds(223, 10, 61, 16);
+			contentPanel.add(lbPostID);
+		}
+		{
+			lbPostDate = new JLabel("Date");
+			lbPostDate.setHorizontalAlignment(SwingConstants.RIGHT);
+			lbPostDate.setBounds(356, 10, 138, 16);
+			contentPanel.add(lbPostDate);
+		}
+		{
+			lbPostText = new JLabel("Text");
+			lbPostText.setVerticalAlignment(SwingConstants.TOP);
+			lbPostText.setBounds(6, 89, 488, 104);
+			contentPanel.add(lbPostText);
+		}
 
-//		seePostFromDatabase(m);
+		lbPostImage = new JLabel("Image");
+		lbPostImage.setHorizontalAlignment(SwingConstants.CENTER);
+		lbPostImage.setBounds(6, 205, 488, 143);
+		contentPanel.add(lbPostImage);
+
+		seeBookmarkFromDB(m);
 
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton btnOk = new JButton("OK");
-				btnOk.setForeground(new Color(255, 255, 255));
-				btnOk.addActionListener(new ActionListener() {
+				btnPrevious = new JButton("<-");
+				btnPrevious.setForeground(new Color(0, 0, 0));
+				btnPrevious.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						dispose();
+
 					}
 				});
-				buttonPane.add(btnOk);
-				getRootPane().setDefaultButton(btnOk);
+				{
+					btnReply = new JButton("Reply");
+					buttonPane.add(btnReply);
+				}
+				{
+					btnLike = new JButton("Like");
+					buttonPane.add(btnLike);
+				}
+				{
+					btnBookmark = new JButton("Bmk");
+					buttonPane.add(btnBookmark);
+				}
+				buttonPane.add(btnPrevious);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.addActionListener(new ActionListener() {
+				btnClose = new JButton("X");
+				btnClose.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();
 					}
 				});
-				buttonPane.add(cancelButton);
+				buttonPane.add(btnClose);
 			}
+
+			btnNext = new JButton("->");
+			btnNext.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
+			buttonPane.add(btnNext);
 		}
 
 		setSize(500, 750);
+		setLocationRelativeTo(parent);
 		var parentLocation = parent.getLocationOnScreen();
 		setLocation(parentLocation.x + parent.getWidth() - getWidth(),
 				parentLocation.y + parent.getHeight() / 2 - getHeight() / 2 + 50);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+		seeBookmarkFromDB(m);
+
 		setVisible(true);
 	}
 
+	/**
+	 * See tweet from database.
+	 */
+	public Bookmark bookmark;
+
+	private void seeBookmarkFromDB(int n) {
+		final String DB_URL = "jdbc:mysql://localhost/twitter_3rd";
+		final String USERNAME = "root";
+		final String PASSWORD = "msNjs0330";
+
+		try {
+			Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+			// connected to database successfully...
+
+			Statement stmt = conn.createStatement();
+			String s1 = "SELECT * FROM bookmark ORDER BY bmk_pst_date DESC LIMIT " + n + ", 1";
+			PreparedStatement preparedStatement = conn.prepareStatement(s1);
+
+			ResultSet resultSet = null;
+			resultSet = preparedStatement.executeQuery();
+
+			if (resultSet.next()) {
+//				int bookmark_id = resultSet.getInt(1);
+//				currentBookmarkID = resultSet.getInt(1);
+				
+				int bookmark_post_id = resultSet.getInt(2);
+
+				String bookmark_post_text = resultSet.getString(3);
+				String bookmark_post_image = resultSet.getString(4);
+//				String bookmark_post_video = resultSet.getString(5);
+				int bookmark_post_num_of_likes = resultSet.getInt(6);
+				String bookmark_post_user_id = resultSet.getString(7);
+//				String bookmark_user_id = resultSet.getString(8);
+				String bookmark_post_date = resultSet.getString(9);
+
+				lbPostUserID.setText(bookmark_post_user_id);
+				lbPostID.setText(String.valueOf(bookmark_post_id));
+				lbPostDate.setText(bookmark_post_date);
+				lbPostText.setText(bookmark_post_text);
+				lbPostImage.setText(bookmark_post_image);
+//                lbPostVideo.setText(bookmark_post_video);
+				btnLike.setText(String.valueOf(bookmark_post_num_of_likes));
+			}
+
+			stmt.close();
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

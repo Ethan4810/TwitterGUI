@@ -119,6 +119,7 @@ public class Login extends JDialog {
 							cur_user_id = user.id;
 							System.out.println("current user = " + cur_user_id); // for debugging
 							setVisible(true);
+
 							dispose();
 						} else {
 							JOptionPane.showMessageDialog(Login.this, "ID or Password Invalid.", "Login Failed",
