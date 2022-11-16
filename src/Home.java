@@ -29,7 +29,7 @@ public class Home extends JDialog {
 	public static int currentPostID = 0;
 	public static int maxPostID = 0;
 
-	public static int cur_post_id; // declare current post id 
+	public static int cur_post_id; // declare current post id
 	String cur_user_id = Login.cur_user_id; // get current user id from Login class
 
 	/**
@@ -96,7 +96,7 @@ public class Home extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				btnReply = new JButton("Reply");
-				btnReply.setForeground(new Color(255, 255, 255));
+				btnReply.setForeground(new Color(0, 0, 255));
 				btnReply.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						new Reply(parent);
@@ -119,7 +119,9 @@ public class Home extends JDialog {
 			btnBookmark = new JButton("Bmk");
 			btnBookmark.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					addBookmarkToDB();
 					dispose();
+					new Home(parent);
 				}
 			});
 			buttonPane.add(btnBookmark);
@@ -170,7 +172,7 @@ public class Home extends JDialog {
 		setLocation(parentLocation.x + parent.getWidth() - getWidth(),
 				parentLocation.y + parent.getHeight() / 2 - getHeight() / 2 + 50);
 
-		seePostFromDatabase(m);
+		seeTweetFromDB(m);
 
 		setVisible(true);
 	}
@@ -181,7 +183,7 @@ public class Home extends JDialog {
 	public Post post;
 	public Comment comment;
 
-	private void seePostFromDatabase(int n) {
+	private void seeTweetFromDB(int n) {
 		final String DB_URL = "jdbc:mysql://localhost/twitter_3rd";
 		final String USERNAME = "root";
 		final String PASSWORD = "msNjs0330";
@@ -198,15 +200,15 @@ public class Home extends JDialog {
 			resultSet = preparedStatement.executeQuery();
 
 			if (resultSet.next()) {
-				int post_id = resultSet.getInt(1);
-				currentPostID = resultSet.getInt(1);
-				cur_post_id = post_id;
-				String post_text = resultSet.getString(2);
-				String post_image = resultSet.getString(3);
-//				String post_video = resultSet.getString(4);
-				int post_num_of_likes = resultSet.getInt(5);
-				String post_user_id = resultSet.getString(6);
-				String post_date = resultSet.getString(7);
+				int post_id = resultSet.getInt(1); // pst_id
+				currentPostID = resultSet.getInt(1); // pst_id
+				cur_post_id = post_id; // pst_id
+				String post_text = resultSet.getString(2); // pst_txt
+				String post_image = resultSet.getString(3); // pst_img
+//				String post_video = resultSet.getString(4); // pst_vid
+				int post_num_of_likes = resultSet.getInt(5); // pst_nol
+				String post_user_id = resultSet.getString(6); // pst_usr_id
+				String post_date = resultSet.getString(7); // pst_date
 
 //				// for debugging
 //				System.out.println("post_user_id=" + post_user_id);
@@ -284,14 +286,100 @@ public class Home extends JDialog {
 				// increase the number of likes for the post in the post table by one
 				String s4 = "UPDATE post SET pst_nol = pst_nol + 1 WHERE pst_id = \"" + cur_post_id + "\"";
 				stmt.executeUpdate(s4);
-				
+
 				System.out.println("You liked this post.");
-				JOptionPane.showMessageDialog(this, "One like added.", "Like Success",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, "One like added.", "Like Success", JOptionPane.INFORMATION_MESSAGE);
 				
+				stmt.close();
+				conn.close();
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Bookmark tweet.
+	 */
+	private void addBookmarkToDB() {
+		final String DB_URL = "jdbc:mysql://localhost/twitter_3rd";
+		final String USERNAME = "root";
+		final String PASSWORD = "msNjs0330";
+
+		try {
+			Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+			// connected to database successfully...
+
+			PreparedStatement pstm = null;
+
+			int bid = -1;
+
+			String s0 = "SELECT * FROM post WHERE pst_id= \"" + cur_post_id + "\"";
+
+			PreparedStatement preparedStatement = conn.prepareStatement(s0);
+
+			ResultSet resultSet = null;
+			resultSet = preparedStatement.executeQuery();
+
+			if (resultSet.next()) {
+				int post_id = resultSet.getInt(1); // pst_id
+				currentPostID = resultSet.getInt(1); // pst_id
+				cur_post_id = post_id; // pst_id
+				String post_text = resultSet.getString(2); // pst_txt
+				String post_image = resultSet.getString(3); // pst_img
+				String post_video = resultSet.getString(4); // pst_vid
+				int post_num_of_likes = resultSet.getInt(5); // pst_nol
+				String post_user_id = resultSet.getString(6); // pst_usr_id
+				String post_date = resultSet.getString(7); // pst_date
+				Statement stmt = conn.createStatement();
+				ResultSet rs = null;
+
+				// solution for duplicate entry error!
+				String s1 = "SELECT bmk_pst_usr_id FROM bookmark WHERE bmk_usr_id=\"" + cur_user_id
+						+ "\" AND bmk_pst_id=\"" + cur_post_id + "\"";
+
+				rs = stmt.executeQuery(s1);
+
+				if (rs.next()) {
+					System.out.println("You already bookmarked this post!");
+					JOptionPane.showMessageDialog(this, "You already bookmarked this post!", "Bookmark Failed",
+							JOptionPane.ERROR_MESSAGE);
+				} else {
+					stmt.close();
+					++bid; // for bmk_id
+
+					// import usr_id for corresponding pst_id from the post table
+					String s2 = " SELECT DISTINCT pst_usr_id FROM post WHERE pst_id=\"" + cur_post_id + "\" ";
+					rs = stmt.executeQuery(s2);
+					post_user_id = ""; // pst_usr_id
+
+					// get the usr_id of the person who wrote the post
+					while (rs.next()) {
+						post_user_id = rs.getString(1);
+					}
+
+					// insert the information about the post and the information about the person
+					// who likes the post into the post_like table
+					String s3 = "INSERT INTO bookmark VALUES(\"" + bid + "\", \"" + cur_post_id + "\", \"" + post_text
+							+ "\", \"" + post_image + "\", \"" + post_video + "\", \"" + post_num_of_likes + "\", \""
+							+ post_user_id + "\", \"" + cur_user_id + "\", \"" + post_date + "\")";
+					pstm = conn.prepareStatement(s3);
+					pstm.executeUpdate();
+
+					System.out.println("You bookmarked this post.");
+					JOptionPane.showMessageDialog(this, "Bookmark added.", "Bookmark Success",
+							JOptionPane.INFORMATION_MESSAGE);
+
+				}
+				
+				stmt.close();
+				conn.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 }
