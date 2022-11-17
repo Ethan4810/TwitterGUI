@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.*;
 import java.awt.Font;
+import java.awt.Image;
+import java.awt.Insets;
 
 public class Dashboard extends JFrame {
 
@@ -67,7 +69,7 @@ public class Dashboard extends JFrame {
 		// TODO new feature: get resolution from each computer and set size accordingly
 		contentPanel.setSize(500, 811);
 
-		boolean hasRegisteredUsers = connectToDatabase();
+		boolean hasRegisteredUsers = connectToDB();
 
 		// show login dialog
 		if (hasRegisteredUsers) {
@@ -101,54 +103,96 @@ public class Dashboard extends JFrame {
 		contentPane.add(buttonPanel);
 		buttonPanel.setLayout(null);
 
-		btnProfile = new JButton("Profile");
+		btnProfile = new JButton();
+		ImageIcon profileImageIcon = new ImageIcon(Dashboard.class.getResource("/images/profile.png"));
+		Image profileImage = profileImageIcon.getImage(); // transform it 
+		Image newProfileImage = profileImage.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		profileImageIcon = new ImageIcon(newProfileImage); // transform it back
+		btnProfile.setIcon(profileImageIcon);
+		btnProfile.setMargin(new Insets(0, 0, 0, 0));
+		btnProfile.setBorder(null);
 		btnProfile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new Profile(Dashboard.this);
 			}
 		});
-		btnProfile.setBounds(-1, 63, 117, 29);
+		btnProfile.setBounds(22, 37, 65, 65);
 		buttonPanel.add(btnProfile);
 
-		btnHome = new JButton("Home");
+		btnHome = new JButton();
+		ImageIcon homeImageIcon = new ImageIcon(Dashboard.class.getResource("/images/home.png"));
+		Image homeImage = homeImageIcon.getImage(); // transform it 
+		Image newHomeImage = homeImage.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		homeImageIcon = new ImageIcon(newHomeImage); // transform it back
+		btnHome.setIcon(homeImageIcon);
+		btnHome.setMargin(new Insets(0, 0, 0, 0));
+		btnHome.setBorder(null);
 		btnHome.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new Home(Dashboard.this);
 			}
 		});
-		btnHome.setBounds(-1, 183, 117, 29);
+		btnHome.setBounds(22, 170, 65, 65);
 		buttonPanel.add(btnHome);
-
-		btnTweet = new JButton("Tweet");
+		
+		btnTweet = new JButton();
+		ImageIcon tweetImageIcon = new ImageIcon(Dashboard.class.getResource("/images/write.png"));
+		Image tweetImage = tweetImageIcon.getImage(); // transform it 
+		Image newTweetImage = tweetImage.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		tweetImageIcon = new ImageIcon(newTweetImage); // transform it back
+		btnTweet.setIcon(tweetImageIcon);
+		btnTweet.setMargin(new Insets(0, 0, 0, 0));
+		btnTweet.setBorder(null);
 		btnTweet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new Tweet(Dashboard.this);
 				new Post();
 			}
 		});
-		btnTweet.setBounds(-1, 311, 117, 29);
+		btnTweet.setBounds(22, 300, 65, 65);
 		buttonPanel.add(btnTweet);
 
-		btnBookmarks = new JButton("Bookmarks");
+		btnBookmarks = new JButton();
+		ImageIcon bmkImageIcon = new ImageIcon(Dashboard.class.getResource("/images/bookmark.png"));
+		Image bmkImage = bmkImageIcon.getImage(); // transform it 
+		Image newBmkImage = bmkImage.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		bmkImageIcon = new ImageIcon(newBmkImage); // transform it back
+		btnBookmarks.setIcon(bmkImageIcon);
+		btnBookmarks.setMargin(new Insets(0, 0, 0, 0));
+		btnBookmarks.setBorder(null);
 		btnBookmarks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new Bookmarks(Dashboard.this);
 			}
 		});
-		btnBookmarks.setBounds(-1, 453, 117, 29);
+		btnBookmarks.setBounds(22, 440, 65, 65);
 		buttonPanel.add(btnBookmarks);
 
-		btnMessages = new JButton("Messages");
+		btnMessages = new JButton();
+		ImageIcon msgImageIcon = new ImageIcon(Dashboard.class.getResource("/images/message.png"));
+		Image msgImage = msgImageIcon.getImage(); // transform it 
+		Image newMsgImage = msgImage.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		msgImageIcon = new ImageIcon(newMsgImage); // transform it back
+		btnMessages.setIcon(msgImageIcon);
+		btnMessages.setMargin(new Insets(0, 0, 0, 0));
+		btnMessages.setBorder(null);
 		btnMessages.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new Messages(Dashboard.this);
 			}
 		});
-		btnMessages.setBounds(-1, 585, 117, 29);
+		btnMessages.setBounds(22, 571, 65, 65);
 		buttonPanel.add(btnMessages);
 
 		// TODO: fix dashboard not showing error after logout -> sign up -> cancel -> login
-		btnLogout = new JButton("Logout");
+		btnLogout = new JButton();
+		ImageIcon logoutImageIcon = new ImageIcon(Dashboard.class.getResource("/images/logout.png"));
+		Image logoutImage = logoutImageIcon.getImage(); // transform it 
+		Image newLogoutImage = logoutImage.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		logoutImageIcon = new ImageIcon(newLogoutImage); // transform it back
+		btnLogout.setIcon(logoutImageIcon);
+		btnLogout.setMargin(new Insets(0, 0, 0, 0));
+		btnLogout.setBorder(null);
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// logout success
@@ -169,9 +213,10 @@ public class Dashboard extends JFrame {
 				}
 			}
 		});
-		btnLogout.setBounds(-1, 716, 117, 29);
+		btnLogout.setBounds(22, 707, 65, 65);
 		buttonPanel.add(btnLogout);
 		setSize(650, 850);
+		setResizable(false);
 
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -180,7 +225,7 @@ public class Dashboard extends JFrame {
 	/**
 	 * Connect to Database.
 	 */
-	private boolean connectToDatabase() {
+	private boolean connectToDB() {
 		boolean hasRegisteredUsers = false;
 
 		final String MYSQL_SERVER_URL = "jdbc:mysql://localhost/";

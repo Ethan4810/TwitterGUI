@@ -75,7 +75,7 @@ public class Tweet extends JDialog {
 				btnTweet.setForeground(new Color(255, 255, 255));
 				btnTweet.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						tweetPost();
+						writeTweet();
 					}
 				});
 				buttonPane.add(btnTweet);
@@ -104,10 +104,10 @@ public class Tweet extends JDialog {
 	/**
 	 * Write tweet.
 	 */
-	User user = null;
+	public User user;
 	public Post post;
 
-	private void tweetPost() {
+	private void writeTweet() {
 		int post_id = 0; // pst_id
 		post_id++;
 
@@ -138,7 +138,7 @@ public class Tweet extends JDialog {
 		String post_image = ""; // pst_img
 		String post_video = ""; // pst_vid
 		int post_num_of_likes = 0; // pst_nol
-
+		
 		String cur_user_id = Login.cur_user_id;
 		String post_user_id = cur_user_id; // pst_usr_id
 
@@ -147,7 +147,7 @@ public class Tweet extends JDialog {
 			return;
 		}
 
-		post = addPostToDatabase(post_id, post_text, post_image, post_video, post_num_of_likes, post_user_id);
+		post = addTweetToDB(post_id, post_text, post_image, post_video, post_num_of_likes, post_user_id);
 		if (post != null) {
 			System.out.println("You posted a tweet.");
 			JOptionPane.showMessageDialog(this, "Post ID = " + post_id, "Tweet Success",
@@ -162,7 +162,7 @@ public class Tweet extends JDialog {
 	/**
 	 * Add tweet to database.
 	 */
-	private Post addPostToDatabase(int post_id, String post_text, String post_image, String post_video,
+	private Post addTweetToDB(int post_id, String post_text, String post_image, String post_video,
 			int post_num_of_likes, String post_user_id) {
 		Post post = null;
 

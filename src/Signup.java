@@ -203,7 +203,7 @@ public class Signup extends JDialog {
 			return;
 		}
 
-		user = addUserToDatabase(id, pwd, name, email, phone, birthdate);
+		user = addUserToDB(id, pwd, name, email, phone, birthdate);
 		if (user != null) {
 			JOptionPane.showMessageDialog(this, "Registered a new user.", "Sign up Success",
 					JOptionPane.INFORMATION_MESSAGE);
@@ -219,7 +219,7 @@ public class Signup extends JDialog {
 	 */
 	public User user;
 
-	private User addUserToDatabase(String id, String pwd, String name, String email, String phone, String birthdate) {
+	private User addUserToDB(String id, String pwd, String name, String email, String phone, String birthdate) {
 		User user = null;
 
 		final String DB_URL = "jdbc:mysql://localhost/twitter_3rd";

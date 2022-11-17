@@ -110,7 +110,7 @@ public class Login extends JDialog {
 						String id = tfID.getText();
 						String pwd = String.valueOf(pfPwd.getPassword());
 
-						user = getAuthenticateUser(id, pwd);
+						user = authenticateUser(id, pwd);
 
 						// save user id for other functions!!!
 						if (user != null) {
@@ -154,7 +154,7 @@ public class Login extends JDialog {
 	 */
 	public User user;
 
-	private User getAuthenticateUser(String id, String pwd) {
+	private User authenticateUser(String id, String pwd) {
 		User user = null;
 
 		final String DB_URL = "jdbc:mysql://localhost/twitter_3rd";

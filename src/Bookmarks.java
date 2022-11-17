@@ -93,8 +93,6 @@ public class Bookmarks extends JDialog {
 		lbPostImage.setBounds(6, 205, 488, 143);
 		contentPanel.add(lbPostImage);
 
-		seeBookmarkFromDB(m);
-
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -104,19 +102,36 @@ public class Bookmarks extends JDialog {
 				btnPrevious.setForeground(new Color(0, 0, 0));
 				btnPrevious.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-
+						dispose();
+						if (m <= 1) {
+						} else {
+							m--;
+						}
+						new Bookmarks(parent);
 					}
 				});
 				{
 					btnReply = new JButton("Reply");
+					btnReply.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+						}
+					});
 					buttonPane.add(btnReply);
 				}
 				{
 					btnLike = new JButton("Like");
+					btnLike.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+						}
+					});
 					buttonPane.add(btnLike);
 				}
 				{
 					btnBookmark = new JButton("Bmk");
+					btnBookmark.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+						}
+					});
 					buttonPane.add(btnBookmark);
 				}
 				buttonPane.add(btnPrevious);
@@ -134,6 +149,12 @@ public class Bookmarks extends JDialog {
 			btnNext = new JButton("->");
 			btnNext.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					dispose();
+					if (m >= maxBookmarkID) {
+						m++;
+					} else {
+					}
+					new Bookmarks(parent);
 				}
 			});
 			buttonPane.add(btnNext);
@@ -165,22 +186,22 @@ public class Bookmarks extends JDialog {
 			// connected to database successfully...
 
 			Statement stmt = conn.createStatement();
-			String s1 = "SELECT * FROM bookmark ORDER BY bmk_pst_date DESC LIMIT " + n + ", 1";
+			String s1 = "SELECT * FROM bookmark ORDER BY bmk_id DESC LIMIT " + n + ", 1";
 			PreparedStatement preparedStatement = conn.prepareStatement(s1);
 
 			ResultSet resultSet = null;
 			resultSet = preparedStatement.executeQuery();
 
 			if (resultSet.next()) {
-//				int bookmark_id = resultSet.getInt(1);
-//				currentBookmarkID = resultSet.getInt(1);
-				
+				int bookmark_id = resultSet.getInt(1);
+				currentBookmarkID = resultSet.getInt(1);
+				cur_bookmark_id = bookmark_id;
 				int bookmark_post_id = resultSet.getInt(2);
-
 				String bookmark_post_text = resultSet.getString(3);
 				String bookmark_post_image = resultSet.getString(4);
 //				String bookmark_post_video = resultSet.getString(5);
 				int bookmark_post_num_of_likes = resultSet.getInt(6);
+				System.out.println(bookmark_post_num_of_likes);
 				String bookmark_post_user_id = resultSet.getString(7);
 //				String bookmark_user_id = resultSet.getString(8);
 				String bookmark_post_date = resultSet.getString(9);
