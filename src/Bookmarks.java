@@ -170,7 +170,7 @@ public class Bookmarks extends JDialog {
 	}
 
 	/**
-	 * See tweet from database.
+	 * See bookmark from database.
 	 */
 	public Bookmark bookmark;
 
@@ -179,12 +179,15 @@ public class Bookmarks extends JDialog {
 		final String USERNAME = "root";
 		final String PASSWORD = "msNjs0330";
 
+		String cur_user_id = Login.curUserId;
 		try {
 			Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
 			// connected to database successfully...
 
 			Statement stmt = conn.createStatement();
-			String s1 = "SELECT * FROM bookmark ORDER BY bmk_id DESC LIMIT " + n + ", 1";
+			String s1 = "SELECT * FROM bookmark WHERE bmk_usr_id LIKE \"" + cur_user_id
+					+ "\" ORDER BY bmk_id DESC LIMIT " + n + ", 1";
+
 			PreparedStatement preparedStatement = conn.prepareStatement(s1);
 
 			ResultSet resultSet = null;

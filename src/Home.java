@@ -132,7 +132,7 @@ public class Home extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					dispose();
 					System.out.printf("cur_post_id= %d, max_post_id= %d\n ", curPostId + 1, maxPostId);
-					if (curPostId  <= 0) {
+					if (curPostId <= 0) {
 						m = maxPostId;
 						curPostId = maxPostId;
 
@@ -296,6 +296,9 @@ public class Home extends JDialog {
 				// increase the number of likes for the post in the post table by one
 				String s4 = "UPDATE post SET pst_nol = pst_nol + 1 WHERE pst_id = \"" + curPostId + "\"";
 				stmt.executeUpdate(s4);
+				
+				String s5 = "UPDATE bookmark SET bmk_pst_nol = bmk_pst_nol + 1 WHERE bmk_pst_id = \"" + curPostId + "\"";
+				stmt.executeUpdate(s5);
 
 				System.out.println("You liked this post.");
 				JOptionPane.showMessageDialog(this, "One like added.", "Like Success", JOptionPane.INFORMATION_MESSAGE);
@@ -376,7 +379,7 @@ public class Home extends JDialog {
 				dispose();
 			} else {
 				System.out.println("Bookmark failed.");
-				JOptionPane.showMessageDialog(this, "Try again!", "Bookmark Failed", JOptionPane.ERROR_MESSAGE);
+//				JOptionPane.showMessageDialog(this, "Try again!", "Bookmark Failed", JOptionPane.ERROR_MESSAGE);
 			}
 
 		} catch (Exception e) {
@@ -402,37 +405,51 @@ public class Home extends JDialog {
 			// connected to database successfully...
 
 			Statement stmt = conn.createStatement();
-//			System.out.println("cur_post_id = " + curPostId);
-			String sql = "INSERT INTO bookmark (bmk_pst_id, bmk_pst_txt, bmk_pst_img, bmk_pst_vid, bmk_pst_nol, bmk_pst_usr_id, bmk_usr_id, bmk_pst_date)"
-					+ "SELECT ?, ?, ?, ?, ?, ?, \"" + curUserId + "\" , ?" + "FROM post WHERE pst_id= \""
+			ResultSet rs = null;
+
+			// solution for duplicate entry error!!!
+			String s1 = "SELECT bmk_usr_id FROM bookmark WHERE bmk_usr_id=\"" + curUserId + "\" AND bmk_pst_id=\""
 					+ curPostId + "\"";
 
-			PreparedStatement preparedStatement = conn.prepareStatement(sql);
-			preparedStatement.setInt(1, bookmark_post_id);
-			preparedStatement.setString(2, bookmark_post_text);
-			preparedStatement.setString(3, bookmark_post_image);
-			preparedStatement.setString(4, bookmark_post_video);
-			preparedStatement.setInt(5, bookmark_post_num_of_likes);
-			preparedStatement.setString(6, bookmark_post_user_id);
-			preparedStatement.setString(7, bookmark_post_date);
+			rs = stmt.executeQuery(s1);
 
-			// insert row into the bookmark table
-			int addedRows = preparedStatement.executeUpdate();
-			if (addedRows > 0) {
-				bookmark = new Bookmark();
-				bookmark.bookmark_post_id = bookmark_post_id;
-				bookmark.bookmark_post_text = bookmark_post_text;
-				bookmark.bookmark_post_image = bookmark_post_image;
-				bookmark.bookmark_post_video = bookmark_post_video;
-				bookmark.bookmark_post_num_of_likes = bookmark_post_num_of_likes;
-				bookmark.bookmark_post_user_id = bookmark_post_user_id;
-				bookmark.bookmark_user_id = curUserId;
-				bookmark.bookmark_post_date = bookmark_post_date;
+			if (rs.next()) {
+				System.out.println("You already bookmarked this post!");
+				JOptionPane.showMessageDialog(this, "You already bookmarked this post!", "Bookmark Failed",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+//			System.out.println("cur_post_id = " + curPostId);
+				String sql = "INSERT INTO bookmark (bmk_pst_id, bmk_pst_txt, bmk_pst_img, bmk_pst_vid, bmk_pst_nol, bmk_pst_usr_id, bmk_usr_id, bmk_pst_date)"
+						+ "SELECT ?, ?, ?, ?, ?, ?, \"" + curUserId + "\" , ?" + "FROM post WHERE pst_id= \""
+						+ curPostId + "\"";
+
+				PreparedStatement preparedStatement = conn.prepareStatement(sql);
+				preparedStatement.setInt(1, bookmark_post_id);
+				preparedStatement.setString(2, bookmark_post_text);
+				preparedStatement.setString(3, bookmark_post_image);
+				preparedStatement.setString(4, bookmark_post_video);
+				preparedStatement.setInt(5, bookmark_post_num_of_likes);
+				preparedStatement.setString(6, bookmark_post_user_id);
+				preparedStatement.setString(7, bookmark_post_date);
+
+				// insert row into the bookmark table
+				int addedRows = preparedStatement.executeUpdate();
+				if (addedRows > 0) {
+					bookmark = new Bookmark();
+					bookmark.bookmark_post_id = bookmark_post_id;
+					bookmark.bookmark_post_text = bookmark_post_text;
+					bookmark.bookmark_post_image = bookmark_post_image;
+					bookmark.bookmark_post_video = bookmark_post_video;
+					bookmark.bookmark_post_num_of_likes = bookmark_post_num_of_likes;
+					bookmark.bookmark_post_user_id = bookmark_post_user_id;
+					bookmark.bookmark_user_id = curUserId;
+					bookmark.bookmark_post_date = bookmark_post_date;
+				}
+
+				stmt.close();
+				conn.close();
+
 			}
-
-			stmt.close();
-			conn.close();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
