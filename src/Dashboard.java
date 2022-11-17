@@ -25,7 +25,7 @@ public class Dashboard extends JFrame {
 	private JButton btnMessages;
 	private JButton btnLogout;
 
-	String cur_user_id = Login.cur_user_id; // get current user id from Login class
+	String cur_user_id = Login.curUserId; // get current user id from Login class
 
 	/**
 	 * Launch the application.

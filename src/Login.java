@@ -23,7 +23,7 @@ public class Login extends JDialog {
 	private JButton btnSignup;
 	private JButton btnQuit;
 
-	public static String cur_user_id; // declare current user id 
+	public static String curUserId; // declare current user id 
 
 	/**
 	 * Launch the application.
@@ -116,8 +116,8 @@ public class Login extends JDialog {
 						if (user != null) {
 							JOptionPane.showMessageDialog(Login.this, "Hello! " + user.id, "Login Success",
 									JOptionPane.INFORMATION_MESSAGE);
-							cur_user_id = user.id;
-							System.out.println("current user = " + cur_user_id); // for debugging
+							curUserId = user.id;
+							System.out.println("current user = " + curUserId); // for debugging
 							setVisible(true);
 
 							dispose();

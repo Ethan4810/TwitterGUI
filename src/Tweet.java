@@ -139,8 +139,8 @@ public class Tweet extends JDialog {
 		String post_video = ""; // pst_vid
 		int post_num_of_likes = 0; // pst_nol
 		
-		String cur_user_id = Login.cur_user_id;
-		String post_user_id = cur_user_id; // pst_usr_id
+		String curUserId = Login.curUserId;
+		String post_user_id = curUserId; // pst_usr_id
 
 		if (post_text.isEmpty()) {
 			JOptionPane.showMessageDialog(this, "Please write something.", "Tweet Failed", JOptionPane.ERROR_MESSAGE);

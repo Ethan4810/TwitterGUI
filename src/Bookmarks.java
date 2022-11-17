@@ -9,7 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
-import java.sql.*;
 
 public class Bookmarks extends JDialog {
 
@@ -30,9 +29,8 @@ public class Bookmarks extends JDialog {
 	private JButton btnClose;
 	private JButton btnNext;
 
-	public static int cur_bookmark_id; // declare current bookmark id
-	String cur_user_id = Login.cur_user_id; // get current user id from Login class
-	int cur_post_id = Home.cur_post_id; // get current post id from Home class
+	String cur_user_id = Login.curUserId; // get current user id from Login class
+	int cur_post_id = Home.curPostId; // get current post id from Home class
 
 	public static int m = 0;
 	public static int currentBookmarkID = 0;
@@ -194,8 +192,7 @@ public class Bookmarks extends JDialog {
 
 			if (resultSet.next()) {
 				int bookmark_id = resultSet.getInt(1);
-				currentBookmarkID = resultSet.getInt(1);
-				cur_bookmark_id = bookmark_id;
+				currentBookmarkID = bookmark_id;
 				int bookmark_post_id = resultSet.getInt(2);
 				String bookmark_post_text = resultSet.getString(3);
 				String bookmark_post_image = resultSet.getString(4);

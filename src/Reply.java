@@ -17,8 +17,8 @@ public class Reply extends JDialog {
 	private JButton btnCancel;
 	private JButton btnReply;
 
-	String cur_user_id = Login.cur_user_id; // get current user id from Login class
-	int cur_post_id = Home.cur_post_id; // get current post id from Home class
+	String cur_user_id = Login.curUserId; // get current user id from Login class
+	int cur_post_id = Home.curPostId; // get current post id from Home class
 
 	/**
 	 * Launch the application.

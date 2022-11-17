@@ -26,11 +26,9 @@ public class Home extends JDialog {
 	private JButton btnPrevious;
 
 	public static int m = 0;
-	public static int currentPostID = 0;
-	public static int maxPostID = 0;
-
-	public static int cur_post_id; // declare current post id
-	String cur_user_id = Login.cur_user_id; // get current user id from Login class
+	public static int curPostId = 0;
+	public static int maxPostId = 0;
+	String curUserId = Login.curUserId; // get current user id from Login class
 
 	/**
 	 * Launch the application.
@@ -126,16 +124,24 @@ public class Home extends JDialog {
 			});
 			buttonPane.add(btnBookmark);
 
+			seeTweetFromDB(m);
+
 			// TODO: fix first tweet not showing error after pressing next button
 			btnPrevious = new JButton("<-");
 			btnPrevious.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					dispose();
-					if (m <= 1) {
+					System.out.printf("cur_post_id= %d, max_post_id= %d\n ", curPostId + 1, maxPostId);
+					if (curPostId  <= 0) {
+						m = maxPostId;
+						curPostId = maxPostId;
+
 					} else {
+						curPostId--;
 						m--;
 					}
-					new Home(parent);
+					Home home = new Home(parent);
+					System.out.println(home);
 				}
 			});
 			buttonPane.add(btnPrevious);
@@ -155,11 +161,17 @@ public class Home extends JDialog {
 			btnNext.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					dispose();
-					if (m >= maxPostID) {
-						m++;
+					System.out.printf("cur_post_id= %d, max_post_id= %d\n ", curPostId - 1, maxPostId);
+					if (curPostId - 1 > maxPostId) {
+						curPostId = 1;
+						m = 1;
+
 					} else {
+						m++;
+						maxPostId++;
 					}
-					new Home(parent);
+					Home home = new Home(parent);
+					System.out.println(home);
 				}
 			});
 			buttonPane.add(btnNext);
@@ -171,8 +183,6 @@ public class Home extends JDialog {
 		var parentLocation = parent.getLocationOnScreen();
 		setLocation(parentLocation.x + parent.getWidth() - getWidth(),
 				parentLocation.y + parent.getHeight() / 2 - getHeight() / 2 + 50);
-
-		seeTweetFromDB(m);
 
 		setVisible(true);
 	}
@@ -193,6 +203,15 @@ public class Home extends JDialog {
 			// connected to database successfully...
 
 			Statement stmt = conn.createStatement();
+			ResultSet rs = null;
+
+			String s0 = "SELECT DISTINCT MAX(pst_id) from post";
+			rs = stmt.executeQuery(s0);
+			if (rs.next()) {
+				maxPostId = rs.getInt(1);
+//				System.out.printf("max_post_id = %d\n", maxPostId);
+			}
+
 			String s1 = "SELECT * FROM post ORDER BY pst_date DESC LIMIT " + n + ", 1";
 			PreparedStatement preparedStatement = conn.prepareStatement(s1);
 
@@ -201,8 +220,7 @@ public class Home extends JDialog {
 
 			if (resultSet.next()) {
 				int post_id = resultSet.getInt(1); // pst_id
-				currentPostID = resultSet.getInt(1); // pst_id
-				cur_post_id = post_id; // pst_id
+				curPostId = post_id; // pst_id
 				String post_text = resultSet.getString(2); // pst_txt
 				String post_image = resultSet.getString(3); // pst_img
 //				String post_video = resultSet.getString(4); // pst_vid
@@ -246,8 +264,8 @@ public class Home extends JDialog {
 			ResultSet rs = null;
 
 			// solution for duplicate entry error!!!
-			String s1 = "SELECT pstl_lkr_id FROM post_like WHERE pstl_lkr_id=\"" + cur_user_id + "\" AND pstl_pst_id=\""
-					+ cur_post_id + "\"";
+			String s1 = "SELECT pstl_lkr_id FROM post_like WHERE pstl_lkr_id=\"" + curUserId + "\" AND pstl_pst_id=\""
+					+ curPostId + "\"";
 
 			rs = stmt.executeQuery(s1);
 
@@ -259,24 +277,24 @@ public class Home extends JDialog {
 				++plid; // for pstl_id
 
 				// import usr_id for corresponding pst_id from the post table
-				String s2 = " SELECT DISTINCT pst_usr_id FROM post WHERE pst_id=\"" + cur_post_id + "\" ";
+				String s2 = " SELECT DISTINCT pst_usr_id FROM post WHERE pst_id=\"" + curPostId + "\" ";
 				rs = stmt.executeQuery(s2);
-				String post_user_id = ""; // pst_usr_id
+				String postUserId = ""; // pst_usr_id
 
 				// get the usr_id of the person who wrote the post
 				while (rs.next()) {
-					post_user_id = rs.getString(1);
+					postUserId = rs.getString(1);
 				}
 
 				// insert the information about the post and the information about the person
 				// who likes the post into the post_like table
-				String s3 = "INSERT INTO post_like VALUES(\"" + plid + "\", \"" + cur_user_id + "\", \"" + cur_post_id
-						+ "\", \"" + post_user_id + "\")";
+				String s3 = "INSERT INTO post_like VALUES(\"" + plid + "\", \"" + curUserId + "\", \"" + curPostId
+						+ "\", \"" + postUserId + "\")";
 				pstm = conn.prepareStatement(s3);
 				pstm.executeUpdate();
 
 				// increase the number of likes for the post in the post table by one
-				String s4 = "UPDATE post SET pst_nol = pst_nol + 1 WHERE pst_id = \"" + cur_post_id + "\"";
+				String s4 = "UPDATE post SET pst_nol = pst_nol + 1 WHERE pst_id = \"" + curPostId + "\"";
 				stmt.executeUpdate(s4);
 
 				System.out.println("You liked this post.");
@@ -317,13 +335,13 @@ public class Home extends JDialog {
 			rs = stmt.executeQuery(s0);
 			if (rs.next()) {
 				bookmark_id = rs.getInt(1) + 1;
-				System.out.printf("bmk_id = %d\n", bookmark_id); // for debugging
+//				System.out.printf("bmk_id = %d\n", bookmark_id); // for debugging
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		String cur_user_id = Login.cur_user_id;
+		String curUserId = Login.curUserId;
 
 		try {
 			Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
@@ -333,7 +351,7 @@ public class Home extends JDialog {
 			ResultSet rs = null;
 
 			// solution for duplicate entry error!!!
-			String s1 = "SELECT * from post WHERE pst_id= \"" + cur_post_id + "\"";
+			String s1 = "SELECT * from post WHERE pst_id= \"" + curPostId + "\"";
 			rs = stmt.executeQuery(s1);
 
 			if (rs.next()) {
@@ -343,7 +361,7 @@ public class Home extends JDialog {
 				String bookmark_post_video = rs.getString(4);
 				int bookmark_post_nol = rs.getInt(5);
 				String bookmark_post_user_id = rs.getString(6);
-				String bookmark_user_id = cur_user_id;
+				String bookmark_user_id = curUserId;
 				String bookmark_post_date = rs.getString(7);
 
 				bookmark = addBookmarkToDB(bookmark_id, bookmark_post_id, bookmark_post_text, bookmark_post_image,
@@ -353,7 +371,7 @@ public class Home extends JDialog {
 
 			if (bookmark != null) {
 				System.out.println("Bookmark success.");
-				JOptionPane.showMessageDialog(this, "Bookamrk ID = " + bookmark_id, "Bookmark Success",
+				JOptionPane.showMessageDialog(this, "Bookmark ID = " + bookmark_id, "Bookmark Success",
 						JOptionPane.INFORMATION_MESSAGE);
 				dispose();
 			} else {
@@ -384,10 +402,10 @@ public class Home extends JDialog {
 			// connected to database successfully...
 
 			Statement stmt = conn.createStatement();
-			System.out.println("cur_post_id = " + cur_post_id);
+//			System.out.println("cur_post_id = " + curPostId);
 			String sql = "INSERT INTO bookmark (bmk_pst_id, bmk_pst_txt, bmk_pst_img, bmk_pst_vid, bmk_pst_nol, bmk_pst_usr_id, bmk_usr_id, bmk_pst_date)"
-					+ "SELECT ?, ?, ?, ?, ?, ?, \"" + cur_user_id + "\" , ?" + "FROM post WHERE pst_id= \""
-					+ cur_post_id + "\"";
+					+ "SELECT ?, ?, ?, ?, ?, ?, \"" + curUserId + "\" , ?" + "FROM post WHERE pst_id= \""
+					+ curPostId + "\"";
 
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
 			preparedStatement.setInt(1, bookmark_post_id);
@@ -408,7 +426,7 @@ public class Home extends JDialog {
 				bookmark.bookmark_post_video = bookmark_post_video;
 				bookmark.bookmark_post_num_of_likes = bookmark_post_num_of_likes;
 				bookmark.bookmark_post_user_id = bookmark_post_user_id;
-				bookmark.bookmark_user_id = cur_user_id;
+				bookmark.bookmark_user_id = curUserId;
 				bookmark.bookmark_post_date = bookmark_post_date;
 			}
 
