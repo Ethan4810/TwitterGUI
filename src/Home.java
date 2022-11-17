@@ -45,7 +45,7 @@ public class Home extends JDialog {
 	}
 
 	/**
-	 * Create the dialog.
+	 * Create the Home dialog.
 	 */
 	public Home(JFrame parent) {
 		super(parent);
@@ -94,14 +94,12 @@ public class Home extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				btnReply = new JButton("Reply");
-				btnReply.setForeground(new Color(0, 0, 255));
 				btnReply.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						new Reply(parent);
 					}
 				});
 				buttonPane.add(btnReply);
-				getRootPane().setDefaultButton(btnReply);
 			}
 
 			btnLike = new JButton("Like");

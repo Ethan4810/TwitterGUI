@@ -53,7 +53,7 @@ public class Login extends JDialog {
 	}
 
 	/**
-	 * Create the dialog.
+	 * Create the Login dialog.
 	 */
 	public Login(JFrame parent) {
 		super(parent);
@@ -104,7 +104,6 @@ public class Login extends JDialog {
 			});
 			{
 				btnLogin = new JButton("Login");
-				btnLogin.setForeground(new Color(255, 255, 255));
 				btnLogin.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						String id = tfID.getText();

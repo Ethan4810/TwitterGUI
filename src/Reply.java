@@ -43,7 +43,7 @@ public class Reply extends JDialog {
 	}
 
 	/**
-	 * Create the dialog.
+	 * Create the Reply dialog.
 	 */
 	public Reply(JFrame parent) {
 		super(parent);
@@ -75,7 +75,6 @@ public class Reply extends JDialog {
 			
 			{
 				btnReply = new JButton("Reply");
-				btnReply.setForeground(new Color(255, 255, 255));
 				btnReply.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						replyTweet();

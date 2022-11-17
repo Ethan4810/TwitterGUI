@@ -38,7 +38,7 @@ public class Tweet extends JDialog {
 	}
 
 	/**
-	 * Create the dialog.
+	 * Create the Tweet dialog.
 	 */
 	public Tweet(JFrame parent) {
 		super(parent);
@@ -72,7 +72,6 @@ public class Tweet extends JDialog {
 			
 			{
 				btnTweet = new JButton("Tweet");
-				btnTweet.setForeground(new Color(255, 255, 255));
 				btnTweet.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						writeTweet();

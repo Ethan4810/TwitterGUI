@@ -31,7 +31,7 @@ public class Messages extends JDialog {
 	}
 
 	/**
-	 * Create the dialog.
+	 * Create the Messages dialog.
 	 */
 	public Messages(JFrame parent) {
 		super(parent);
@@ -47,7 +47,6 @@ public class Messages extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
-				okButton.setForeground(new Color(255, 255, 255));
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();

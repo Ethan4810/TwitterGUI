@@ -43,7 +43,7 @@ public class Dashboard extends JFrame {
 	}
 
 	/**
-	 * Create the frame.
+	 * Create the Dashboard frame.
 	 */
 	public Dashboard() {
 		setTitle("Dashboard");
@@ -59,8 +59,15 @@ public class Dashboard extends JFrame {
 		contentPane.add(contentPanel);
 		contentPanel.setLayout(null);
 		
-		// TODO fix: name not showing error after sign up
 		lbWelcomeUser = new JLabel("Hello! ");
+				
+		ImageIcon twitterImageIcon = new ImageIcon(Dashboard.class.getResource("/images/twitter.png"));
+		Image twitterImage = twitterImageIcon.getImage(); // transform it 
+		Image newTwitterImage = twitterImage.getScaledInstance(60, 60,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		twitterImageIcon = new ImageIcon(newTwitterImage); // transform it back
+		lbWelcomeUser.setIcon(twitterImageIcon);
+		lbWelcomeUser.setBorder(null);
+		
 		lbWelcomeUser.setFont(new Font("Lucida Grande", Font.PLAIN, 17));
 		lbWelcomeUser.setHorizontalAlignment(SwingConstants.CENTER);
 		lbWelcomeUser.setBounds(6, 6, 488, 46);
@@ -106,7 +113,7 @@ public class Dashboard extends JFrame {
 		btnProfile = new JButton();
 		ImageIcon profileImageIcon = new ImageIcon(Dashboard.class.getResource("/images/profile.png"));
 		Image profileImage = profileImageIcon.getImage(); // transform it 
-		Image newProfileImage = profileImage.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		Image newProfileImage = profileImage.getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
 		profileImageIcon = new ImageIcon(newProfileImage); // transform it back
 		btnProfile.setIcon(profileImageIcon);
 		btnProfile.setMargin(new Insets(0, 0, 0, 0));
@@ -122,7 +129,7 @@ public class Dashboard extends JFrame {
 		btnHome = new JButton();
 		ImageIcon homeImageIcon = new ImageIcon(Dashboard.class.getResource("/images/home.png"));
 		Image homeImage = homeImageIcon.getImage(); // transform it 
-		Image newHomeImage = homeImage.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		Image newHomeImage = homeImage.getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
 		homeImageIcon = new ImageIcon(newHomeImage); // transform it back
 		btnHome.setIcon(homeImageIcon);
 		btnHome.setMargin(new Insets(0, 0, 0, 0));
@@ -138,7 +145,7 @@ public class Dashboard extends JFrame {
 		btnTweet = new JButton();
 		ImageIcon tweetImageIcon = new ImageIcon(Dashboard.class.getResource("/images/write.png"));
 		Image tweetImage = tweetImageIcon.getImage(); // transform it 
-		Image newTweetImage = tweetImage.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		Image newTweetImage = tweetImage.getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
 		tweetImageIcon = new ImageIcon(newTweetImage); // transform it back
 		btnTweet.setIcon(tweetImageIcon);
 		btnTweet.setMargin(new Insets(0, 0, 0, 0));
@@ -155,7 +162,7 @@ public class Dashboard extends JFrame {
 		btnBookmarks = new JButton();
 		ImageIcon bmkImageIcon = new ImageIcon(Dashboard.class.getResource("/images/bookmark.png"));
 		Image bmkImage = bmkImageIcon.getImage(); // transform it 
-		Image newBmkImage = bmkImage.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		Image newBmkImage = bmkImage.getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
 		bmkImageIcon = new ImageIcon(newBmkImage); // transform it back
 		btnBookmarks.setIcon(bmkImageIcon);
 		btnBookmarks.setMargin(new Insets(0, 0, 0, 0));
@@ -171,7 +178,7 @@ public class Dashboard extends JFrame {
 		btnMessages = new JButton();
 		ImageIcon msgImageIcon = new ImageIcon(Dashboard.class.getResource("/images/message.png"));
 		Image msgImage = msgImageIcon.getImage(); // transform it 
-		Image newMsgImage = msgImage.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		Image newMsgImage = msgImage.getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
 		msgImageIcon = new ImageIcon(newMsgImage); // transform it back
 		btnMessages.setIcon(msgImageIcon);
 		btnMessages.setMargin(new Insets(0, 0, 0, 0));
@@ -188,7 +195,7 @@ public class Dashboard extends JFrame {
 		btnLogout = new JButton();
 		ImageIcon logoutImageIcon = new ImageIcon(Dashboard.class.getResource("/images/logout.png"));
 		Image logoutImage = logoutImageIcon.getImage(); // transform it 
-		Image newLogoutImage = logoutImage.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		Image newLogoutImage = logoutImage.getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
 		logoutImageIcon = new ImageIcon(newLogoutImage); // transform it back
 		btnLogout.setIcon(logoutImageIcon);
 		btnLogout.setMargin(new Insets(0, 0, 0, 0));

@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.Color;
+//import java.awt.Color;
 
 public class Profile extends JDialog {
 
@@ -32,7 +32,7 @@ public class Profile extends JDialog {
 	}
 
 	/**
-	 * Create the dialog.
+	 * Create the Profile dialog.
 	 */
 	public Profile(JFrame parent) {
 		super(parent);
@@ -49,7 +49,6 @@ public class Profile extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
-				okButton.setForeground(new Color(255, 255, 255));
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();

@@ -51,7 +51,7 @@ public class Bookmarks extends JDialog {
 	}
 
 	/**
-	 * Create the dialog.
+	 * Create the Bookmarks dialog.
 	 */
 	public Bookmarks(JFrame parent) {
 		super(parent);
@@ -97,7 +97,6 @@ public class Bookmarks extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				btnPrevious = new JButton("<-");
-				btnPrevious.setForeground(new Color(0, 0, 0));
 				btnPrevious.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();

@@ -51,7 +51,7 @@ public class Signup extends JDialog {
 	}
 
 	/**
-	 * Create the dialog.
+	 * Create the Signup dialog.
 	 */
 	public Signup(JFrame parent) {
 		super(parent);
@@ -151,10 +151,11 @@ public class Signup extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				btnSignup = new JButton("Sign up");
-				btnSignup.setForeground(new Color(255, 255, 255));
 				btnSignup.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						signupUser();
+						dispose();
+						new Login(parent);
 					}
 				});
 				buttonPane.add(btnSignup);
